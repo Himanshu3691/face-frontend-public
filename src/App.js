@@ -1,19 +1,34 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+ // Adjust paths as necessary
 import Login from './Login';
-import Signup from './Signup';
-import { Link, Route, Routes } from 'react-router-dom';
+import Dashboard from './Dashboard';
+import { AuthProvider } from './AuthContext';
+import ProtectedRoute from './ProtectedRoute'; // Adjust the path as necessary
+import HomePage from './HomePage';
+import ImageUpload from './component/ImageUpload';
 
-function App() {
-  return (
-    <div className="App min-h-screen bg-gray-500 flex flex-col justify-center items-center">
-      <div className="w-full max-w-md p-4 bg-white shadow-md rounded-lg">
-        <Login/>
-       
-          {/* <Link to="/signup" className="text-blue-500 hover:text-blue-700 font-semibold">Signup</Link> */}
+const App = () => {
+    return (<div>
+     
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/" element={
+                        <ProtectedRoute>
+                            <HomePage/>
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/dashboard" element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    } />
+                    {/* Add other protected routes similarly */}
+                </Routes>
+                </div>
         
-      </div>
-    </div>
-  );
-}
+           
+    );
+};
 
 export default App;
