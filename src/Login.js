@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
-
+    const navigate =useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8000/api/accounts/login/', { username, password });
-            console.log(res.data);
-            alert('Login successful');
+            const res = await axios.post('http://127.0.0.1:8000/teacherlogin/', { email, password });
+            if (res.status === 200) {
+                console.log(res.status)
+                console.log(res.data);
+
+                navigate('/take');
+            } else {
+                console.log("not login");
+            }
         } catch (error) {
-            console.error(error.response.data);
-            alert('Login failed');
+            if (error.response) {
+                
+                console.error(error.response.data);
+                alert(`Login failed: ${error.response.data}`);
+            } else if (error.request) {
+               
+                console.error(error.request);
+                alert('Login failed: No response from server');
+            } else {
+                
+                console.error('Error', error.message);
+                alert('Login failed: Error in request setup');
+            }
         }
     };
 
@@ -22,7 +40,7 @@ const Login = () => {
             <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Login to Your Account</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" required 
+                    <input type="text" value={email} onChange={e => setemail(e.target.value)} placeholder="Email" required 
                     className="w-full px-4 py-2 text-lg text-gray-700  bg-white rounded-md focus:border-blue-500 focus:outline-none focus:ring" />
                 </div>
                 <div>
