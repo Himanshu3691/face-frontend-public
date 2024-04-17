@@ -10,7 +10,7 @@ import ImageUpload from './component/ImageUpload';
 
 const App = () => {
     return (<div>
-     
+     <ImageUpload/>
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={
