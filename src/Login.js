@@ -15,10 +15,11 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:8000/api/accounts/login/', { email, password });
+            const res = await axios.post('http://127.0.0.1:8000/teacherlogin/', { email, password });
             if (res.status === 200) {
+                console.log("success");
                 login(res.data.token);  // Update login state with token
-                navigate('/');  // Navigate to the homepage
+                navigate('/home');  // Navigate to the homepage
             } else {
                 setErrorMessage(`Login failed: ${res.status}`);
             }

@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import './ImageUpload.css';
 
 function ImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [faceCounts, setFaceCounts] = useState([]);
+  const [faceCounts, setFaceCounts] = useState(null);
   const [imagePreviewUrls, setImagePreviewUrls] = useState([]);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -12,10 +13,15 @@ function ImageUpload() {
     const files = Array.from(event.target.files);
     setSelectedFiles(prevState => [...prevState, ...files]);
 
+    // Preview the selected images
     const readers = files.map((file, index) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreviewUrls(prevState => [...prevState, reader.result]);
+        setImagePreviewUrls(prevState => {
+          let copy = [...prevState];
+          copy[index] = reader.result;
+          return copy;
+        });
       };
       reader.readAsDataURL(file);
     });
@@ -28,7 +34,8 @@ function ImageUpload() {
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
     const dataUrl = canvas.toDataURL('image/png');
-    setSelectedFiles(prevState => [...prevState, dataUrl]);
+    const blob = dataURItoBlob(dataUrl);
+    setSelectedFiles(prevState => [...prevState, blob]);
     setImagePreviewUrls(prevState => [...prevState, dataUrl]);
   };
 
@@ -36,10 +43,10 @@ function ImageUpload() {
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
         videoRef.current.srcObject = stream;
-      })
-      .catch(err => console.error('Error accessing the camera:', err));
-  };
 
+      })
+      .catch(err => console.error(err));
+  };
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = videoRef.current.srcObject.getTracks();
@@ -47,6 +54,17 @@ function ImageUpload() {
       videoRef.current.srcObject = null;
     }
   };
+
+  const dataURItoBlob = (dataURI) => {
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  }
 
   const deleteImage = (index) => {
     setSelectedFiles(prevState => prevState.filter((_, i) => i !== index));
@@ -72,29 +90,29 @@ function ImageUpload() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col items-center space-y-4">
-        <input type="file" accept="image/*" multiple onChange={handleFileChange} className="form-input" />
-        <div className="flex space-x-2">
-          <button onClick={startCamera} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Start Camera</button>
-          <button onClick={stopCamera} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Stop Camera</button>
-          <button onClick={captureImage} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Capture Image</button>
-          <button onClick={handleSubmit} className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Upload</button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {imagePreviewUrls.map((url, index) => (
-            <div key={index} className="relative">
-              <img src={url} alt={`Preview ${index}`} className="rounded-lg shadow-lg max-w-full h-auto" />
-              <button onClick={() => deleteImage(index)} className="absolute top-0 right-0 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full">X</button>
-            </div>
-          ))}
-        </div>
-        {faceCounts && faceCounts.map((count, index) => (
-          <p key={index} className="text-lg text-gray-800">Image {index + 1}: {count} faces detected</p>
+    <div className="image-upload">
+      <h1 className='text'>Take Attendance</h1>
+      <input type="file" accept="image/*" multiple onChange={handleFileChange} />
+      <div className="camera-controls">
+        <button onClick={startCamera}>Start Camera</button>
+        <button onClick={stopCamera}>Stop Camera</button>
+        <button onClick={captureImage}>Capture Image</button>
+      </div>
+      <video ref={videoRef} autoPlay className="video-feed"></video>
+      <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+      <button onClick={handleSubmit} className="upload-button">Upload</button>
+      <div className="image-previews">
+        {imagePreviewUrls.map((url, index) => (
+          <div key={index} className="image-preview">
+            <img src={url} alt={`Preview ${index}`} />
+            <button onClick={() => deleteImage(index)}>✖</button>
+          </div>
         ))}
       </div>
+      {faceCounts && faceCounts.map((count, index) => (
+        <p key={index}>Image {index + 1}: {count} faces detected</p>
+      ))}
     </div>
   );
 }
-
 export default ImageUpload;

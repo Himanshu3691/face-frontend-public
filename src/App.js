@@ -10,19 +10,27 @@ import ImageUpload from './component/ImageUpload';
 
 const App = () => {
     return (<div>
-     <ImageUpload/>
+     {/* <ImageUpload/> */}
                 <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/" element={
-                        <ProtectedRoute>
-                            <HomePage/>
-                        </ProtectedRoute>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/home" element={
+                     
+                             <HomePage/>
+                        
+                            
+                        
                     } />
+                    {
+                        <Route path='/takeattandance' element={<ImageUpload/>}/>
+
+                        
+                    }
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
                             <Dashboard />
                         </ProtectedRoute>
                     } />
+
                     {/* Add other protected routes similarly */}
                 </Routes>
                 </div>
