@@ -8,7 +8,7 @@ function Navbar() {
   return (
     <div className='flex h-14 items-center text-white bg-cyan-700 justify-center border-b-[1px] border-b-richblack-700'>
       <div className="container mx-auto flex justify-between items-center p-4">
-        <Link to="/home">
+        <Link to="/">
          Home
         </Link>
         <div className="space-x-4">

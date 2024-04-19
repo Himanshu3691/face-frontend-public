@@ -7,22 +7,33 @@ import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute'; // Adjust the path as necessary
 import HomePage from './HomePage';
 import ImageUpload from './component/ImageUpload';
+import AttendanceForm from './component/AttandenceForm';
+import TakeattAndence from './component/TakeAttandence';
 
 const App = () => {
     return (<div>
-     <ImageUpload/>
+     {/* <ImageUpload/> */}
+     {/* <AttendanceForm/> */}
                 <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/" element={
-                        <ProtectedRoute>
-                            <HomePage/>
-                        </ProtectedRoute>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/home" element={
+                     
+                             <HomePage/>
+                        
+                            
+                        
                     } />
+                    {
+                        <Route path='/takeattandance' element={<TakeattAndence/>}/>
+
+                        
+                    }
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
                             <Dashboard />
                         </ProtectedRoute>
                     } />
+
                     {/* Add other protected routes similarly */}
                 </Routes>
                 </div>
