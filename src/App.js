@@ -7,10 +7,13 @@ import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute'; // Adjust the path as necessary
 import HomePage from './HomePage';
 import ImageUpload from './component/ImageUpload';
+import AttendanceForm from './component/AttandenceForm';
+import TakeattAndence from './component/TakeAttandence';
 
 const App = () => {
     return (<div>
      {/* <ImageUpload/> */}
+     {/* <AttendanceForm/> */}
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/home" element={
@@ -21,7 +24,7 @@ const App = () => {
                         
                     } />
                     {
-                        <Route path='/takeattandance' element={<ImageUpload/>}/>
+                        <Route path='/takeattandance' element={<TakeattAndence/>}/>
 
                         
                     }
