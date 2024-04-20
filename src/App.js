@@ -12,8 +12,6 @@ import TakeattAndence from './component/TakeAttandence';
 
 const App = () => {
     return (<div>
-     {/* <ImageUpload/> */}
-     {/* <AttendanceForm/> */}
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/home" element={
@@ -29,9 +27,9 @@ const App = () => {
                         
                     }
                     <Route path="/dashboard" element={
-                        <ProtectedRoute>
+
                             <Dashboard />
-                        </ProtectedRoute>
+                        
                     } />
 
                     {/* Add other protected routes similarly */}
