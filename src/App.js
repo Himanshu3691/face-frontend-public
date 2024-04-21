@@ -9,6 +9,7 @@ import HomePage from './HomePage';
 import ImageUpload from './component/ImageUpload';
 import AttendanceForm from './component/AttandenceForm';
 import TakeattAndence from './component/TakeAttandence';
+import StudentRegister from './StudentRegister';
 
 const App = () => {
     return (<div>
@@ -31,6 +32,7 @@ const App = () => {
                             <Dashboard />
                         
                     } />
+                    <Route path='/register' element={<StudentRegister/>}/>
 
                     {/* Add other protected routes similarly */}
                 </Routes>

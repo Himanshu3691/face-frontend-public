@@ -1,6 +1,10 @@
 import React from 'react';
 
 const AttendanceTable = ({ attendance }) => {
+    console.log(
+        "AttendanceTable -> attendance",
+        attendance
+    );
     return (<div>
     { attendance && attendance.attendance && attendance.attendance.length > 0 ?
         <div className="container mx-auto px-4 py-8">
